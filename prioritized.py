@@ -28,7 +28,28 @@ class PrioritizedPlanningSolver(object):
 
         start_time = timer.time()
         result = []
-        constraints = []
+        constraints = [{'agent': 1,'loc': [(1,3),(1,4)],'timestep': 2},
+                       {'agent': 1,'loc': [(1,3)],'timestep': 2},
+                       {'agent': 1,'loc': [(1,2)],'timestep': 2}]
+
+
+        # Constraint for Task 1.2
+        #constraints = [{'agent': 0,'loc': [(1,5)],'timestep': 4}]
+        
+        # Constraint for Task 1.3
+        #constraints = [{'agent': 1,'loc': [(1,2),(1,3)],'timestep': 1}]
+
+        # Constraints for Task 1.4
+        #constraints = [{'agent': 0,'loc': [(1,5)],'timestep': 10},
+         #              {'agent': 0,'loc': [(1,3),(1,4)],'timestep': 5},
+          #             {'agent': 0,'loc': [(1,3),(1,4)],'timestep': 7},
+           #            {'agent': 0,'loc': [(1,2),(1,3)],'timestep': 2}]
+
+         # Constraints for Task 1.5
+        #constraints = [{'agent': 1,'loc': [(1,3),(1,4)],'timestep': 2},
+         #              {'agent': 1,'loc': [(1,3),(1,3)],'timestep': 2},
+          #             {'agent': 1,'loc': [(1,3),(1,2)],'timestep': 2}]
+        
 
         for i in range(self.num_of_agents):  # Find path for each agent
             path = a_star(self.my_map, self.starts[i], self.goals[i], self.heuristics[i],
