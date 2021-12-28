@@ -55,15 +55,20 @@ def build_constraint_table(constraints, agent):
     #               is_constrained function.
 
     constraint_table = dict()
-    max_time_step = 0
+    #max_time_step = 0
     for constraint in constraints:
 
-        if constraint['agent'] == agent:
-            if constraint['timestep'] in constraint_table.keys():
-                constraint_table[constraint['timestep']].append(constraint)
-            else:
-                constraint_table[constraint['timestep']] = [] #[constraint['loc']]
+        for constraint in constraints:
 
+            if not ('positive' in constraint.keys()):
+                constraint['positive']=False
+            
+            if constraint["agent"] != agent:
+                continue
+            if constraint["timestep"] not in constraint_table:
+                constraint_table[constraint["timestep"]] = []
+            constraint_table[constraint["timestep"]].append(constraint)
+    
     return constraint_table
 
 
@@ -98,6 +103,16 @@ def is_constrained(curr_loc, next_loc, next_time, constraint_table):
     if next_time in constraint_table:
         
         for constraint in constraint_table[next_time]:
+
+            #1.2
+            #if constraint['loc'] == [next_loc]:
+            #        return True
+
+            #1.3
+            #if constraint['loc'] == [curr_loc, next_loc]:
+            #    return True
+
+            #1.5   
             if len(constraint['loc']) == 1:
                 if constraint['loc'] == [next_loc]:
                     return True
@@ -140,6 +155,11 @@ def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints):
     open_list = []
     closed_list = dict()
     earliest_goal_timestep = 0
+
+    #2.3 2.4
+    if len(constraintTable.keys()) > 0:
+        earliest_goal_timestep = 3
+    
     h_value = h_values[start_loc]
     
     # Task 1.1.1: Add a new key/value pair for the time step
@@ -159,11 +179,13 @@ def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints):
         
         # Task 1.4: Adjust the goal test condition to handle goal constraints
 
-        #if curr['time_step']>10:
-         #   print("couldnt be solved in time :( ")
-          #  return None
+        # task 2.4: Addressing failures
 
-        if curr['loc'] == goal_loc and is_constrained(curr["loc"], curr["loc"], curr["time_step"], constraintTable) == False:
+        #if curr['time_step']>10:
+        #    print("couldnt be solved in time :( ")
+        #    return None
+
+        if curr['loc'] == goal_loc and (is_constrained(curr["loc"], curr["loc"], curr["time_step"], constraintTable)) == False:
             return get_path(curr)
 
         
@@ -197,4 +219,10 @@ def a_star(my_map, start_loc, goal_loc, h_values, agent, constraints):
                 push_node(open_list, child)
 
     return None  # Failed to find solutions
+
+
+
+
+
+
 

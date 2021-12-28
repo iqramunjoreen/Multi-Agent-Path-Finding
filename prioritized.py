@@ -28,27 +28,31 @@ class PrioritizedPlanningSolver(object):
 
         start_time = timer.time()
         result = []
-        constraints = [{'agent': 1,'loc': [(1,3),(1,4)],'timestep': 2},
-                       {'agent': 1,'loc': [(1,3)],'timestep': 2},
-                       {'agent': 1,'loc': [(1,2)],'timestep': 2}]
+
+        constraints = [{'agent': 0, 'loc': [(2, 4)], 'timestep': 3},
+                        {'agent': 1, 'loc': [(2, 4)], 'timestep': 3}]
 
 
         # Constraint for Task 1.2
         #constraints = [{'agent': 0,'loc': [(1,5)],'timestep': 4}]
         
         # Constraint for Task 1.3
-        #constraints = [{'agent': 1,'loc': [(1,2),(1,3)],'timestep': 1}]
+        #constraints = [{'agent': 0,'loc': [(1,2),(1,3)],'timestep': 1}]
 
         # Constraints for Task 1.4
         #constraints = [{'agent': 0,'loc': [(1,5)],'timestep': 10},
-         #              {'agent': 0,'loc': [(1,3),(1,4)],'timestep': 5},
-          #             {'agent': 0,'loc': [(1,3),(1,4)],'timestep': 7},
-           #            {'agent': 0,'loc': [(1,2),(1,3)],'timestep': 2}]
+        #               {'agent': 0,'loc': [(1,3),(1,4)],'timestep': 5},
+        #               {'agent': 0,'loc': [(1,3),(1,4)],'timestep': 7},
+        #
 
          # Constraints for Task 1.5
-        #constraints = [{'agent': 1,'loc': [(1,3),(1,4)],'timestep': 2},
-         #              {'agent': 1,'loc': [(1,3),(1,3)],'timestep': 2},
-          #             {'agent': 1,'loc': [(1,3),(1,2)],'timestep': 2}]
+        #constraints = [{'agent': 1,'loc': [(1,3)],'timestep': 2},
+        #               {'agent': 1,'loc': [(1,2)],'timestep': 2},
+        #               {'agent': 1,'loc': [(1,3),(1,4)],'timestep': 2}]
+
+        # constraints for Task 3.2
+        # constraints = [{'agent': 0, 'loc': [(1, 4)], 'timestep': 3},
+        #                {'agent': 1, 'loc': [(1, 4)], 'timestep': 3}]
         
 
         for i in range(self.num_of_agents):  # Find path for each agent
@@ -67,6 +71,30 @@ class PrioritizedPlanningSolver(object):
 
 
             ##############################
+            
+            for next_agent in range(self.num_of_agents):
+
+                for i in range (0,10):
+
+                    #2.3
+                    constraints.append({'agent' : next_agent, 'loc' : [path[len(path) - 1]], 'timestep' : len(path)+i - 1})
+
+                
+                for nPath in range(len(path)):
+
+                    #2.1
+                    if next_agent != i:
+                        constraints.append({'agent' : next_agent, 'loc' : [path[nPath]], 'timestep' : nPath})
+
+
+                        #2.2
+                        if nPath > 0:
+                            constraints.append({'agent' : next_agent, 'loc' : [path[nPath],path[nPath-1]], 'timestep' : nPath})
+
+                
+
+            
+            
 
         self.CPU_time = timer.time() - start_time
 
